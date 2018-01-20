@@ -9,7 +9,8 @@ const autoprefixer = require('gulp-autoprefixer');
 const imagemin = require('gulp-imagemin');
 const inject = require('gulp-inject');
 const cache = require('gulp-cache');
-
+const webpack = require('webpack');
+const babel = require('babel');
 
 // Compile Sass & Inject Into Browser
 gulp.task('sass', function() {
@@ -60,7 +61,7 @@ gulp.task('cssmv', function() {
 });
 // Optimize Images and move to /dist/images
 gulp.task('imageMin', () =>
-   gulp.src('src/img/*')
+   gulp.src('src/images/*')
    .pipe(cache(imagemin({
       optimizationLevel: 5,
       progressive: true,
