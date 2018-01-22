@@ -1,0 +1,41 @@
+
+
+.body {
+   margin: 0;
+   padding: 0;
+}
+.navbar {
+   background: #F5D76E;
+   height: 95px;
+}
+#particles-js {
+   background: linear-gradient(to top, rgb(5,85,134), rgba(181,181,181,.1));
+   height: 400px;
+}
+.card {
+   width: 400px;
+   height: 500px;
+
+
+   float: left;
+   margin-bottom: 50px;
+   box-shadow: 0 0.5125rem 1rem 0;
+   display: block;
+}
+.card-header {
+   background-color: #81CFE0;
+   height: 200px;
+   width: 100%;
+}
+.flip-card {
+   padding: 50px;
+}
+.left {
+   margin-left: 2.5%;
+}
+.right {
+   margin-right: 2.5%;
+}
+.card-img {
+
+}
