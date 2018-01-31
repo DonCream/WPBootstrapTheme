@@ -9,7 +9,13 @@ const autoprefixer = require('gulp-autoprefixer');
 const imagemin = require('gulp-imagemin');
 const inject = require('gulp-inject');
 const cache = require('gulp-cache');
+const reload = browserSync.reload;
 
+const src = {
+   scss: './src/scss/*.scss',
+   css: './src/css',
+   html: './src/*.html'
+};
 // Add minified Bootstrap to the src/css folder
 gulp.task('bootmin', function() {
    return gulp.src(['node_modules/bootstrap/dist/css/bootstrap.min.css'])
@@ -37,13 +43,6 @@ gulp.task('particles', function() {
    return gulp.src('node_modules/particles.js/particles.js')
       .pipe(gulp.dest("src/js"));
 });
-// Compile Sass & Inject Into Browser
-gulp.task('sass', function() {
-   return gulp.src(['src/scss/*.scss'])
-      .pipe(sass())
-      .pipe(gulp.dest("src/css"))
-      .pipe(browserSync.stream());
-});
 // Watch all files & reload server
 gulp.task('serve', ['sass'], function() {
    browserSync.init({
@@ -52,6 +51,14 @@ gulp.task('serve', ['sass'], function() {
    gulp.watch(['src/scss/*scss'], ['sass']);
    gulp.watch(['src/*.html']).on('change', browserSync.reload);
 });
+// Compile Sass & Inject Into Browser
+gulp.task('sass', function() {
+   return gulp.src(['./src/scss/*.scss'])
+      .pipe(sass())
+      .pipe(gulp.dest('./src/css'))
+      .pipe(browserSync.stream());
+});
+
 
 //Inject Wordpress theme header and move to /src
 
@@ -112,5 +119,5 @@ gulp.task('serv=e', function() {
 });
 
 gulp.task('default', ['bootmin', 'js', 'fa', 'fonts', 'particles', 'sass']);
-gulp.task('srv', ['sass', 'serve']);
+gulp.task('srv', ['serve']);
 gulp.task('prod', ['scripts', 'famv', 'copyHtml', 'imageMin', 'fontsmv', 'cssmv', 'serve']);

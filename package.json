@@ -1,13 +1,13 @@
 {
-   "author": "Don Cream",
-   "license": "MIT",
-   "name": "wpthemetemplate",
-   "version": "1.0.0",
-   "description": "Bootstrap sample page",
-   "main": "index.js",
-   "scripts": {
-      "start": "gulp"
-},
+  "author": "Don Cream",
+  "license": "MIT",
+  "name": "wpthemetemplate",
+  "version": "1.0.0",
+  "description": "Bootstrap sample page",
+  "main": "index.js",
+  "scripts": {
+    "start": "gulp"
+  },
   "devDependencies": {
     "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
@@ -17,11 +17,13 @@
     "gulp-autoprefixer": "^4.1.0",
     "gulp-cache": "^1.0.2",
     "gulp-concat": "^2.6.1",
+    "gulp-htmlsplit": "^1.1.1",
     "gulp-imagemin": "^4.1.0",
     "gulp-inject": "^4.3.0",
     "gulp-jshint": "^2.1.0",
     "gulp-jslint": "^1.0.10",
     "gulp-notify": "^3.2.0",
+    "gulp-purify-css": "^0.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.1.0",
     "gulp-uglify": "^3.0.0",
