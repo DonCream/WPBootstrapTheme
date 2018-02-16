@@ -9,16 +9,27 @@ const autoprefixer = require('gulp-autoprefixer');
 const imagemin = require('gulp-imagemin');
 const inject = require('gulp-inject');
 const cache = require('gulp-cache');
-const reload = browserSync.reload;
+const htmlsplit = require('gulp-htmlsplit');
 
-const src = {
-   scss: './src/scss/*.scss',
-   css: './src/css',
-   html: './src/*.html'
+var reload = browserSync.reload;
+var src = {
+                css: 'src/css/*.css',
+                scss: 'src/scss/*.scss',
+                images: 'src/images/*.*',
+                js: 'src/js/*.js',
+                html: 'src/*.html'
 };
+var dist = {
+                css: 'dist/css/*.css',
+                scss: 'dist/scss/*.scss',
+                images: 'dist/images/*.*',
+                js: 'dist/js/*.js',
+                html: 'dist/*.php'
+};
+
 // Add minified Bootstrap to the src/css folder
-gulp.task('bootmin', function() {
-   return gulp.src(['node_modules/bootstrap/dist/css/bootstrap.min.css'])
+gulp.task('boots', function() {
+   return gulp.src(['node_modules/bootstrap/dist/css/bootstrap.css'])
       .pipe(gulp.dest("src/css"))
       .pipe(browserSync.stream());
 });
@@ -38,38 +49,30 @@ gulp.task('fa', function() {
    return gulp.src('node_modules/font-awesome/css/font-awesome.min.css')
       .pipe(gulp.dest("src/css"));
 });
-// Move Fonts Folder to src/fonts
-gulp.task('particles', function() {
-   return gulp.src('node_modules/particles.js/particles.js')
-      .pipe(gulp.dest("src/js"));
+// Compile Sass & Inject Into Browser
+gulp.task('sass', function() {
+   return gulp.src(src.scss)
+      .pipe(sass().on('error', sass.logError))
+      .pipe(gulp.dest('src/css'))
+      .pipe(reload({stream: true}));
 });
-// Watch all files & reload server
+// Watch Sass & Server
 gulp.task('serve', ['sass'], function() {
    browserSync.init({
       server: "./src"
    });
-   gulp.watch(['src/scss/*scss'], ['sass']);
-   gulp.watch(['src/*.html']).on('change', browserSync.reload);
+   gulp.watch(src.scss, ['sass']);
+   gulp.watch(src.html).on('change', reload);
 });
-// Compile Sass & Inject Into Browser
-gulp.task('sass', function() {
-   return gulp.src(['./src/scss/*.scss'])
-      .pipe(sass())
-      .pipe(gulp.dest('./src/css'))
-      .pipe(browserSync.stream());
-});
-
 
 //Inject Wordpress theme header and move to /src
-
-
-//Move html files to /dist and rename index.php
-gulp.task('copyHtml', function() {
-   gulp.src('src/*.html')
-      .pipe(gulp.dest('dist'))
-      .pipe(browserSync.stream());
+gulp.task('split', function() {
+  gulp.src('./src/*.html')
+    .pipe(htmlsplit())
+    .pipe(gulp.dest('dist'));
 });
-//Move src/bootstrap.css and font-awesome.min.css to /dist/css
+
+//Move src/bootstrap.css to /dist/css
 gulp.task('cssmv', function() {
    gulp.src(['src/css/bootstrap.css', 'src/css/bootstrap.min.css'])
       .pipe(concat('bootstrap.min.css'))
@@ -97,27 +100,23 @@ gulp.task('imageMin', () =>
       interlaced: true
    })))
    .pipe(gulp.dest('dist/images'))
-
 );
 // concatenate .js files into main.js and move to /dist/js
 gulp.task('scripts', function() {
    gulp.src('src/js/*.js')
-      .pipe(concat('main.js'))
-      .pipe(uglify())
       .pipe(gulp.dest('dist/js'))
       .pipe(browserSync.stream());
 });
-// Watch all files & reload server
-gulp.task('serv=e', function() {
+
+// Watch /dist files and reload server on change
+gulp.task('php', ['sass'], function() {
    browserSync.init({
-      server: "dist"
+      server: "./dist"
    });
-   gulp.watch('dist/index.html').on('change', browserSync.reload);
-   gulp.watch('dist/css/*').on('change', browserSync.reload);
-   gulp.watch('dist/js/*').on('change', browserSync.reload);
-   gulp.watch('dist/images/*').on('change', browserSync.reload);
+   gulp.watch(dist.css, ['sass']);
+   gulp.watch(dist.html).on('change', reload);
 });
 
-gulp.task('default', ['bootmin', 'js', 'fa', 'fonts', 'particles', 'sass']);
+gulp.task('default', ['boots', 'js', 'fa', 'fonts', 'sass']);
 gulp.task('srv', ['serve']);
-gulp.task('prod', ['scripts', 'famv', 'copyHtml', 'imageMin', 'fontsmv', 'cssmv', 'serve']);
+gulp.task('prod', ['scripts', 'famv', 'imageMin', 'fontsmv', 'cssmv']);
