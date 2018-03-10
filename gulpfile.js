@@ -49,7 +49,8 @@ gulp.task('fa', function(){
   return gulp.src('node_modules/font-awesome/css/font-awesome.min.css')
     .pipe(gulp.dest("src/css"));
 });
-//Inject Wordpress theme header and move to /src
+
+//Inject Wordpress theme header and move to /dist
 gulp.task('split', function() {
   gulp.src('./src/*.html')
     .pipe(htmlsplit())
@@ -63,18 +64,21 @@ gulp.task('cssmv', function() {
       .pipe(gulp.dest('dist/css'))
       .pipe(browserSync.stream());
 });
+
 //Move src/style.css to /dist
 gulp.task('famv', function() {
    gulp.src('src/css/font-awesome.min.css')
       .pipe(gulp.dest('dist/css'))
       .pipe(browserSync.stream());
 });
+
 // Move Fonts Folder from src/fonts to dist/fonts
 gulp.task('fontsmv', function() {
    gulp.src('src/fonts/*')
       .pipe(gulp.dest("dist/fonts"))
       .pipe(browserSync.stream());
 });
+
 // Optimize Images and move to /dist/images
 gulp.task('imageMin', () =>
    gulp.src('src/images/*')
@@ -85,6 +89,7 @@ gulp.task('imageMin', () =>
    })))
    .pipe(gulp.dest('dist/images'))
 );
+
 // concatenate .js files into main.js and move to /dist/js
 gulp.task('scripts', function() {
    gulp.src('src/js/*.js')
