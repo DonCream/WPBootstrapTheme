@@ -1,0 +1,11 @@
+/*
+Theme Name: Corners Theme
+Theme URI: 
+Author: Lamar McMiller
+Author URI: http://www.lamarmcmiller.me
+Description: Bootstrap 4 Worpress Theme
+Version: 1.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain:
+*/

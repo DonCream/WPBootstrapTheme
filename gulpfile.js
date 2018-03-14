@@ -11,6 +11,11 @@ const cache = require('gulp-cache');
 const htmlsplit = require('gulp-htmlsplit');
 const inject = require('gulp-inject-string');
 const processhtml = require('gulp-processhtml');
+const autoprefixer = require('gulp-autoprefixer');
+const sourcemaps = require('gulp-sourcemaps');
+const postcss = require('gulp-postcss');
+const cssnano = require('gulp-cssnano');
+const purify = require('gulp-purify-css');
 
 var reload = browserSync.reload,
 opts = { /* plugin options */ };
@@ -66,6 +71,31 @@ gulp.task('sass', function(){
     .pipe(browserSync.stream());
 });
 
+// Add prefixing to style.css
+gulp.task('fix', () =>
+    gulp.src('src/style.css')
+        .pipe(autoprefixer({
+            browsers: ['last 2 versions'],
+            cascade: false
+        }))
+        .pipe(gulp.dest('src'))
+);
+
+// Remove unused css
+gulp.task('purify', function() {
+  return gulp.src('src/*.css')
+    .pipe(purify(['src/*.js', 'src/*.html']))
+    .pipe(gulp.dest('./dist/'));
+});
+
+// Minify css and create sourcemaps
+gulp.task('min', function () {
+    return gulp.src('style.css')
+        .pipe(sourcemaps.init())
+        .pipe(cssnano())
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('src'));
+});
 
 // Watch Sass & Server
 gulp.task('serve', ['sass'], function(){
@@ -77,7 +107,7 @@ gulp.task('serve', ['sass'], function(){
   gulp.watch("src/*.html").on('change', browserSync.reload);
 });
 
-// add php tags to .php files
+// Add php tags to .php files
 gulp.task('process', function () {
     return gulp.src('src/*.html')
                .pipe(processhtml(opts))
@@ -159,4 +189,3 @@ gulp.task('php', ['sass'], function() {
 gulp.task('default', ['boots', 'js', 'fa', 'fonts', 'sass']);
 gulp.task('srv', ['serve']);
 gulp.task('prod', ['process', 'split', 'scripts', 'imageMin', 'fontsmv', 'cssmain', 'cssmv']);
-
